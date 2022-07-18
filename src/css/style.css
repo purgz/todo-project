@@ -1,0 +1,44 @@
+:root{
+    --cadet: #5D737E;
+    --green-sheen: #64B6AC;
+    --celeste: #C0FDFB;
+    --aero-blue: #DAFFEF;
+    --white: #FCFFFD;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+header{
+    background-color: var(--green-sheen);
+    height: 60px;
+}
+footer{
+    background-color: var(--cadet);
+    height: 40px;
+}
+
+.content{
+    display: flex;
+    height: 100%;
+}
+
+.left-nav{
+    background-color: var(--celeste);
+    flex: 1;
+}
+
+.project-view{
+    background-color: var(--white);
+    flex: 4;
+}
