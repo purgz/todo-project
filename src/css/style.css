@@ -43,7 +43,7 @@ footer{
     flex: 4;
 }
 
-.new-project-modal,.new-todo-modal{
+.new-project-modal,.new-todo-modal,.update-todo-modal{
     display: none;
     background-color: rgba(0, 0, 0, 0.5);
     position: fixed;
@@ -52,7 +52,7 @@ footer{
     height: 100%;
 }
 
-.project-modal-content,.todo-modal-content{
+.project-modal-content,.todo-modal-content,.update-todo-modal-content{
     width: 400px;
     height: 100px;
     background-color: white;
@@ -63,7 +63,7 @@ footer{
     border-radius: 10px;
 }
 
-.todo-modal-content{
+.todo-modal-content,.update-todo-modal-content{
     width: 500px;
     height: 200px;
 }

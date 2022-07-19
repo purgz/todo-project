@@ -5,11 +5,13 @@ export default class Dom{
     //static var - temporary for storing projects
     static projects = [];
     static currentExpandedProject;
+    static currentTask;
     
     static loadHome(){
         Dom.loadSideBar();
         Dom.loadNewProjectModal();
         Dom.NewTodoModal();
+        Dom.UpdateTodoModal();
         Dom.newProjectEventListeners();
 
     }
@@ -70,6 +72,30 @@ export default class Dom{
         body.appendChild(modal);        
     }
 
+    static UpdateTodoModal(){
+        const body = document.querySelector("body");
+        const modal = document.createElement("div");
+        modal.classList.add("update-todo-modal");
+        modal.innerHTML = `
+        <div class="update-todo-modal-content">
+            <div class="modal-items">
+                <form id = "update-todo-form">
+                    <input name = "name_input" type = "text" required>
+                    <input name = "date" type = "date" required>
+                    <textarea name = "description" rows = "5" cols = "33" required></textarea>
+                    <select name = "priority" required>
+                        <option value = "low">low</option>
+                        <option value = "medium">medium</option>
+                        <option value = "high">high</option>
+                    </select>
+                    <button id = "update-todo-submit" type = "submit">Add new Todo</button>
+                </form>
+            </div>
+        </div>
+        `        
+        body.appendChild(modal); 
+    }
+
     static NewProject(e){
         e.preventDefault();
         
@@ -104,6 +130,26 @@ export default class Dom{
         
     }
 
+    static UpdateTodo(e){
+        e.preventDefault();
+        console.log(e.target)
+
+        const modal = document.querySelector(".update-todo-modal");
+        modal.style.display = "none";
+
+        let name = e.target.name_input.value;
+        let date = e.target.date.value;
+        let priority = e.target.priority.value;
+        let description = e.target.description.value;
+
+        Dom.currentTask.setName(name);
+        Dom.currentTask.setDueDate(date);
+        Dom.currentTask.setPriority(priority);
+        Dom.currentTask.setDescription(description);
+        Dom.RenderTasks();
+        Dom.currentTask = null;
+    }
+
     static ShowProjectModal(){
         const modal = document.querySelector(".new-project-modal");
         modal.style.display = "block";
@@ -114,9 +160,18 @@ export default class Dom{
         modal.style.display = "block";
     }
 
+    static ShowUpdateModal(e){
+        //stop triggering the dropdown when trying to edit task
+        e.stopPropagation();
+        
+        const modal = document.querySelector(".update-todo-modal");
+        modal.style.display = "block";
+    }
+
     static HideModal(e){
         const modal = document.querySelector(".new-project-modal");
         const todoModal = document.querySelector(".new-todo-modal");
+        const updateModal = document.querySelector(".update-todo-modal");
         //if the parent div of the modal is clicked
         if (e.target == modal){ 
             modal.style.display = "none";
@@ -125,6 +180,10 @@ export default class Dom{
         if (e.target == todoModal){
             
             todoModal.style.display = "none";
+        }
+
+        if (e.target == updateModal){
+            updateModal.style.display = "none";
         }
     }
 
@@ -163,6 +222,11 @@ export default class Dom{
         
         const editBtn = document.createElement("button");
         editBtn.textContent = "Edit";
+        editBtn.addEventListener("click",e=>{
+            Dom.currentTask = task;
+            Dom.ShowUpdateModal(e);
+        });
+
         taskElement.appendChild(editBtn);
 
         taskElement.addEventListener("click",function(){
@@ -208,11 +272,14 @@ export default class Dom{
         const newProjectButton = document.querySelector("#new-project-btn");
         const newProjectForm = document.querySelector("#new-project-form");
         const newTodoForm = document.querySelector("#new-todo-form");
+        const updateTodoForm = document.querySelector("#update-todo-form");
         
         newProjectForm.addEventListener("submit", Dom.NewProject)
         newProjectButton.addEventListener("click", Dom.ShowProjectModal)
        
         newTodoForm.addEventListener("submit", Dom.NewTodo)
+
+        updateTodoForm.addEventListener("submit",Dom.UpdateTodo)
 
         window.addEventListener("click",Dom.HideModal)
     }
