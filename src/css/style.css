@@ -52,7 +52,7 @@ footer{
     height: 100%;
 }
 
-.modal-content{
+.project-modal-content,.todo-modal-content{
     width: 400px;
     height: 100px;
     background-color: white;
@@ -63,7 +63,34 @@ footer{
     border-radius: 10px;
 }
 
+.todo-modal-content{
+    width: 500px;
+    height: 200px;
+}
+
 .project:hover{
     background-color: grey;
+}
+
+.task-container{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+    align-items: center;
+}
+
+.task-element{
+    background-color: grey;
+    height: 30px;
+    width: 80%;
+}
+
+.dropdown-content{
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    background-color: var(--aero-blue);
 }
 

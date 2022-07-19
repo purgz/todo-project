@@ -4,6 +4,7 @@ import Project from "./Project"
 export default class Dom{
     //static var - temporary for storing projects
     static projects = [];
+    static currentExpandedProject;
     
     static loadHome(){
         Dom.loadSideBar();
@@ -33,7 +34,7 @@ export default class Dom{
         const modal = document.createElement("div");
         modal.classList.add("new-project-modal");
         modal.innerHTML = `
-        <div class="modal-content">
+        <div class="project-modal-content">
             <div class="modal-items">
                 <form id = "new-project-form">
                     <input name = "name_input" type = "text">
@@ -50,7 +51,7 @@ export default class Dom{
         const modal = document.createElement("div");
         modal.classList.add("new-todo-modal");
         modal.innerHTML = `
-        <div class="modal-content">
+        <div class="todo-modal-content">
             <div class="modal-items">
                 <form id = "new-todo-form">
                     <input name = "name_input" type = "text" required>
@@ -97,7 +98,10 @@ export default class Dom{
         let priority = e.target.priority.value;
         let description = e.target.description.value;
 
-        console.table(name,date,priority,description);
+        let newTodo = new TodoItem(name,date,description,priority);
+        Dom.currentExpandedProject.addTask(newTodo);
+        Dom.RenderTasks();
+        
     }
 
     static ShowProjectModal(){
@@ -119,7 +123,7 @@ export default class Dom{
         }
 
         if (e.target == todoModal){
-            console.log("test")
+            
             todoModal.style.display = "none";
         }
     }
@@ -141,8 +145,51 @@ export default class Dom{
         })
     }
 
+    static RenderTasks(){
+        const taskContainer = document.querySelector(".task-container");
+        taskContainer.innerHTML = "";
+
+        Dom.currentExpandedProject.getTasks().forEach(task =>{
+            taskContainer.appendChild(Dom.CreateTaskElement(task));
+            taskContainer.appendChild(Dom.DropDown(task));
+        })
+
+    }
+
+    static CreateTaskElement(task){
+        const taskElement = document.createElement("div");
+        taskElement.classList.add("task-element");
+        taskElement.textContent = task.getName();
+        
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "Edit";
+        taskElement.appendChild(editBtn);
+
+        taskElement.addEventListener("click",function(){
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if(content.style.maxHeight){
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        })
+
+        return taskElement;
+    }
+
+    static DropDown(task){
+        const content = document.createElement("div");
+        const text = document.createElement("p");
+        text.textContent = "dropdown info"
+        content.appendChild(text);
+        content.classList.add("dropdown-content")
+        return content;
+    }
+   
+
     static ExpandProject(project){
-        const  projectView = document.querySelector(".expanded-project-view");
+        const projectView = document.querySelector(".expanded-project-view");
         projectView.innerHTML = "";
 
         projectView.textContent = project.getName();
@@ -151,6 +198,9 @@ export default class Dom{
         btn.textContent = "Add new todo";
         btn.addEventListener("click",Dom.ShowTodoModal);
         projectView.appendChild(btn);
+
+        Dom.currentExpandedProject = project;
+        Dom.RenderTasks();
     }
 
     //event listeners
