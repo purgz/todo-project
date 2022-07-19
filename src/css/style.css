@@ -43,7 +43,7 @@ footer{
     flex: 4;
 }
 
-.new-project-modal{
+.new-project-modal,.new-todo-modal{
     display: none;
     background-color: rgba(0, 0, 0, 0.5);
     position: fixed;
@@ -62,3 +62,8 @@ footer{
     position: absolute;
     border-radius: 10px;
 }
+
+.project:hover{
+    background-color: grey;
+}
+
