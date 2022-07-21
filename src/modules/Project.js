@@ -15,4 +15,9 @@ export default class Project{
     getTasks(){
         return this.tasks;
     }
+
+    removeTask(task){
+        let index = this.tasks.indexOf(task)
+        this.tasks.splice(index,1);
+    }
 }

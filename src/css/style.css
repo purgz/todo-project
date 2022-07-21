@@ -19,9 +19,13 @@ body{
     justify-content: space-between;
 }
 
-header{
+#header{
     background-color: var(--green-sheen);
     height: 60px;
+    display: flex;
+    align-items: center;
+    padding-left: 18px;
+    
 }
 
 
@@ -65,7 +69,7 @@ header{
     height: 200px;
 }
 
-.project:hover{
+.project:hover,#today:hover,#week:hover{
     background-color: grey;
 }
 

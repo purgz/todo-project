@@ -35,6 +35,12 @@ export default class Dom{
         const sideBar = document.querySelector(".left-nav");
         sideBar.innerHTML = `
         <div>
+            <div id = "today">
+                Today
+            </div>
+            <div id = "week">
+                This week
+            </div>
             <button id = "new-project-btn">New Project</button>
             <div class = "project-container-wrapper">
                 Projects
@@ -142,7 +148,7 @@ export default class Dom{
         
         Dom.currentExpandedProject.addTask(newTodo);
         Storage.updateProjects(Dom.projects);
-        Dom.RenderTasks();
+        Dom.RenderTasks(Dom.currentExpandedProject.getTasks());
         
     }
 
@@ -162,8 +168,9 @@ export default class Dom{
         Dom.currentTask.setDueDate(date);
         Dom.currentTask.setPriority(priority);
         Dom.currentTask.setDescription(description);
-        Dom.RenderTasks();
         Dom.currentTask = null;
+        
+        Dom.RenderTaskOrUpcomingTask();
 
         Storage.updateProjects(Dom.projects);
     }
@@ -219,15 +226,25 @@ export default class Dom{
         })
     }
 
-    static RenderTasks(){
+    static RenderTasks(tasks){
         const taskContainer = document.querySelector(".task-container");
         taskContainer.innerHTML = "";
 
-        Dom.currentExpandedProject.getTasks().forEach(task =>{
+        tasks.forEach(task =>{
             taskContainer.appendChild(Dom.CreateTaskElement(task));
             taskContainer.appendChild(Dom.DropDown(task));
         })
+    }
 
+    static RenderTaskOrUpcomingTask(){
+        //when making a delete, if the upcoming tabs are open they are displayed instead of the old current expanded project
+        if (Dom.currentExpandedProject === 7){
+            Dom.ShowUpcomingTasks(7);
+        } else if (Dom.currentExpandedProject === 1){
+            Dom.ShowUpcomingTasks(1);
+        } else {
+            Dom.RenderTasks(Dom.currentExpandedProject.getTasks());
+        }
     }
 
     static CreateTaskElement(task){
@@ -245,7 +262,7 @@ export default class Dom{
         });
 
         const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "Delete";
+        deleteBtn.textContent = "Completed";
         deleteBtn.addEventListener("click",e=>{
             e.stopPropagation();
             Dom.DeleteTodo(task);
@@ -287,6 +304,7 @@ export default class Dom{
 
     static ExpandProject(project){
         const projectView = document.querySelector(".expanded-project-view");
+        const taskView = document.querySelector(".task-container");
         projectView.innerHTML = "";
 
         projectView.textContent = project.getName();
@@ -302,11 +320,12 @@ export default class Dom{
         deleteBtn.addEventListener("click",()=>{
             Dom.DeleteProject(project);
             projectView.innerHTML = "";
+            taskView.innerHTML = "";
         })
         projectView.appendChild(deleteBtn)
 
         Dom.currentExpandedProject = project;
-        Dom.RenderTasks();
+        Dom.RenderTasks(Dom.currentExpandedProject.getTasks());
     }
 
     static DeleteProject(project){
@@ -317,10 +336,39 @@ export default class Dom{
     }
 
     static DeleteTodo(todo){
-        let index = Dom.currentExpandedProject.getTasks().indexOf(todo);
-        Dom.currentExpandedProject.getTasks().splice(index,1);
+        for (let i = 0; i < Dom.projects.length; i++){ //checks what project the selected task is in
+            let todos = Dom.projects[i].getTasks();
+            if (todos.includes(todo)){
+                Dom.projects[i].removeTask(todo);   //deletes that task
+            }
+        }
+       
         Storage.updateProjects(Dom.projects);
-        Dom.RenderTasks();
+        
+        Dom.RenderTaskOrUpcomingTask();
+    }
+
+    static ShowUpcomingTasks(days){
+        Dom.currentExpandedProject = days;
+        const projectView = document.querySelector(".expanded-project-view");
+        projectView.innerHTML = "";
+
+        let todayTasks = [];
+        Dom.projects.forEach(project=>{
+            project.getTasks().forEach(task=>{
+                if (Dom.DayDifference(task.getDueDate()) < (days+1)){
+                    todayTasks.push(task);
+                }
+            })
+        })
+        Dom.RenderTasks(todayTasks);
+    }
+
+    static DayDifference(date){ //calculates the difference in days between two dates
+        let currentDate = new Date();
+        const timeDiff = Math.abs(date - currentDate);
+        const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        return diffDays;
     }
 
     //event listeners
@@ -329,6 +377,8 @@ export default class Dom{
         const newProjectForm = document.querySelector("#new-project-form");
         const newTodoForm = document.querySelector("#new-todo-form");
         const updateTodoForm = document.querySelector("#update-todo-form");
+        const today = document.querySelector("#today");
+        const week = document.querySelector("#week");
         
         newProjectForm.addEventListener("submit", Dom.NewProject)
         newProjectButton.addEventListener("click", Dom.ShowProjectModal)
@@ -336,6 +386,13 @@ export default class Dom{
         newTodoForm.addEventListener("submit", Dom.NewTodo)
 
         updateTodoForm.addEventListener("submit",Dom.UpdateTodo)
+
+        today.addEventListener("click",()=>{
+            Dom.ShowUpcomingTasks(1);
+        })
+        week.addEventListener("click",()=>{
+            Dom.ShowUpcomingTasks(7);
+        });
 
         window.addEventListener("click",Dom.HideModal)
     }
