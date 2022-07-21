@@ -125,6 +125,7 @@ export default class Dom{
         let description = e.target.description.value;
 
         let newTodo = new TodoItem(name,date,description,priority);
+        
         Dom.currentExpandedProject.addTask(newTodo);
         Dom.RenderTasks();
         
@@ -244,9 +245,16 @@ export default class Dom{
 
     static DropDown(task){
         const content = document.createElement("div");
-        const text = document.createElement("p");
-        text.textContent = "dropdown info"
-        content.appendChild(text);
+       
+        content.innerHTML = `
+            <ul>
+                <li>${task.getName()}</li>
+                <li>${task.getDueDate()}</li>
+                <li>${task.getPriority()}</li>
+                <li>${task.getDescription()}</li>
+            </ul>
+        `
+
         content.classList.add("dropdown-content")
         return content;
     }

@@ -92,5 +92,9 @@ footer{
     overflow: hidden;
     transition: max-height 0.2s ease-out;
     background-color: var(--aero-blue);
+    width: 80%;
 }
 
+ul{
+    list-style: none;
+}

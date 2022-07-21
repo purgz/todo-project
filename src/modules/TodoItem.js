@@ -1,7 +1,7 @@
 export default class TodoItem{
     constructor(name,dueDate,description,priority){
         this.name = name;
-        this.dueDate = dueDate;
+        this.dueDate = new Date(dueDate);
         this.description = description;
         this.priority = priority;
     }
@@ -28,7 +28,10 @@ export default class TodoItem{
     }
 
     setDueDate(dueDate){
-        this.dueDate = dueDate;
+        this.dueDate = new Date(dueDate);
     }
-
+    getDueDate(){
+        return this.dueDate;
+    }
+    
 }
