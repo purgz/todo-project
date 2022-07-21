@@ -179,9 +179,6 @@ export default class Dom{
     }
 
     static ShowUpdateModal(e){
-        //stop triggering the dropdown when trying to edit task
-        e.stopPropagation();
-        
         const modal = document.querySelector(".update-todo-modal");
         modal.style.display = "block";
     }
@@ -241,12 +238,23 @@ export default class Dom{
         const editBtn = document.createElement("button");
         editBtn.textContent = "Edit";
         editBtn.addEventListener("click",e=>{
+            //stop triggering the dropdown when trying to edit task
+            e.stopPropagation();
             Dom.currentTask = task;
             Dom.ShowUpdateModal(e);
         });
 
-        taskElement.appendChild(editBtn);
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.addEventListener("click",e=>{
+            e.stopPropagation();
+            Dom.DeleteTodo(task);
+        })
 
+        taskElement.appendChild(editBtn);
+        taskElement.appendChild(deleteBtn);
+
+        //code for the dropdown menu -- from w3schools
         taskElement.addEventListener("click",function(){
             this.classList.toggle("active");
             var content = this.nextElementSibling;
@@ -289,7 +297,7 @@ export default class Dom{
         projectView.appendChild(btn);
 
         const deleteBtn = document.createElement("button");
-        deleteBtn.id = "delete-todo-btn";
+        deleteBtn.classList.add("delete-todo-btn");
         deleteBtn.textContent = "Delete Project";
         deleteBtn.addEventListener("click",()=>{
             Dom.DeleteProject(project);
@@ -306,6 +314,13 @@ export default class Dom{
         Dom.projects.splice(index,1);
         Storage.updateProjects(Dom.projects);
         Dom.RenderProjects();
+    }
+
+    static DeleteTodo(todo){
+        let index = Dom.currentExpandedProject.getTasks().indexOf(todo);
+        Dom.currentExpandedProject.getTasks().splice(index,1);
+        Storage.updateProjects(Dom.projects);
+        Dom.RenderTasks();
     }
 
     //event listeners

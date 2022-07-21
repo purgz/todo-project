@@ -18,7 +18,6 @@ export default class Storage{
         //if empty return empty array
         if (!projects){return []}
 
-        
         let allProjects = JSON.parse(projects);
         
         return allProjects.map(project=>{
