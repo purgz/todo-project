@@ -288,8 +288,24 @@ export default class Dom{
         btn.addEventListener("click",Dom.ShowTodoModal);
         projectView.appendChild(btn);
 
+        const deleteBtn = document.createElement("button");
+        deleteBtn.id = "delete-todo-btn";
+        deleteBtn.textContent = "Delete Project";
+        deleteBtn.addEventListener("click",()=>{
+            Dom.DeleteProject(project);
+            projectView.innerHTML = "";
+        })
+        projectView.appendChild(deleteBtn)
+
         Dom.currentExpandedProject = project;
         Dom.RenderTasks();
+    }
+
+    static DeleteProject(project){
+        let index = Dom.projects.indexOf(project);
+        Dom.projects.splice(index,1);
+        Storage.updateProjects(Dom.projects);
+        Dom.RenderProjects();
     }
 
     //event listeners
