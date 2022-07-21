@@ -1,5 +1,6 @@
 import TodoItem from "./todoItem";
-import Project from "./Project"
+import Project from "./Project";
+import GHIcon from "../images/Icon.svg";
 
 export default class Dom{
     //static var - temporary for storing projects
@@ -8,12 +9,20 @@ export default class Dom{
     static currentTask;
     
     static loadHome(){
+        Dom.loadFooter();
         Dom.loadSideBar();
         Dom.loadNewProjectModal();
         Dom.NewTodoModal();
         Dom.UpdateTodoModal();
         Dom.newProjectEventListeners();
+    }
 
+    static loadFooter(){
+        const footerIcon = document.querySelector("#github-link");
+        const icon = new Image();
+        icon.src = GHIcon;
+        icon.classList.add("gh-icon");
+        footerIcon.appendChild(icon)
     }
 
     static loadSideBar(){
@@ -28,8 +37,6 @@ export default class Dom{
         </div>
         `
     }
-
-
 
     static loadNewProjectModal(){
         const body = document.querySelector("body");

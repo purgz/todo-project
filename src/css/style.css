@@ -23,10 +23,7 @@ header{
     background-color: var(--green-sheen);
     height: 60px;
 }
-footer{
-    background-color: var(--cadet);
-    height: 40px;
-}
+
 
 .content{
     display: flex;
@@ -97,4 +94,21 @@ footer{
 
 ul{
     list-style: none;
+}
+
+#footer{
+    background-color: var(--cadet);
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: white;
+}
+
+.gh-icon{
+    transition: ease-in-out 300ms;
+}
+.gh-icon:hover{
+    transform: rotate(360deg);
 }
