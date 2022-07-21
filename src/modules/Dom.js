@@ -1,5 +1,6 @@
 import TodoItem from "./todoItem";
 import Project from "./Project";
+import Storage from "./Storage";
 import GHIcon from "../images/Icon.svg";
 
 export default class Dom{
@@ -15,6 +16,11 @@ export default class Dom{
         Dom.NewTodoModal();
         Dom.UpdateTodoModal();
         Dom.newProjectEventListeners();
+        
+        Dom.projects = Storage.getProjects();
+        if (Dom.projects.length > 0){
+            Dom.RenderProjects();
+        }
     }
 
     static loadFooter(){
@@ -114,6 +120,7 @@ export default class Dom{
             }
         }
         Dom.projects.push(newProject);
+        Storage.updateProjects(Dom.projects);
          
         const modal = document.querySelector(".new-project-modal");
         modal.style.display = "none";
@@ -134,6 +141,7 @@ export default class Dom{
         let newTodo = new TodoItem(name,date,description,priority);
         
         Dom.currentExpandedProject.addTask(newTodo);
+        Storage.updateProjects(Dom.projects);
         Dom.RenderTasks();
         
     }
@@ -156,6 +164,8 @@ export default class Dom{
         Dom.currentTask.setDescription(description);
         Dom.RenderTasks();
         Dom.currentTask = null;
+
+        Storage.updateProjects(Dom.projects);
     }
 
     static ShowProjectModal(){
