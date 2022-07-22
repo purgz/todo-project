@@ -58,7 +58,7 @@ export default class Dom{
         <div class="project-modal-content">
             <div class="modal-items">
                 <form id = "new-project-form">
-                    <input name = "name_input" type = "text">
+                    <input name = "name_input" type = "text" required>
                     <button id = "new-project-submit" type = "submit">Add Project</button>
                 </form>
             </div>
@@ -254,6 +254,7 @@ export default class Dom{
         
         const editBtn = document.createElement("button");
         editBtn.textContent = "Edit";
+        editBtn.classList.add("edit-todo-btn")
         editBtn.addEventListener("click",e=>{
             //stop triggering the dropdown when trying to edit task
             e.stopPropagation();
@@ -263,13 +264,18 @@ export default class Dom{
 
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "Completed";
+        deleteBtn.classList.add("completed-btn")
         deleteBtn.addEventListener("click",e=>{
             e.stopPropagation();
             Dom.DeleteTodo(task);
         })
 
-        taskElement.appendChild(editBtn);
-        taskElement.appendChild(deleteBtn);
+        const btnContainer = document.createElement("div");
+        btnContainer.classList.add("todo-btn-container");
+        btnContainer.appendChild(editBtn);
+        btnContainer.appendChild(deleteBtn);
+
+        taskElement.appendChild(btnContainer);
 
         //code for the dropdown menu -- from w3schools
         taskElement.addEventListener("click",function(){
@@ -307,10 +313,14 @@ export default class Dom{
         const taskView = document.querySelector(".task-container");
         projectView.innerHTML = "";
 
-        projectView.textContent = project.getName();
+        const title = document.createElement("h2");
+        title.textContent = project.getName();
+        projectView.appendChild(title);
+        
         const btn = document.createElement("button");
         btn.id = "new-todo-btn";
         btn.textContent = "Add new todo";
+        btn.classList.add("new-todo-btn");
         btn.addEventListener("click",Dom.ShowTodoModal);
         projectView.appendChild(btn);
 
@@ -322,7 +332,12 @@ export default class Dom{
             projectView.innerHTML = "";
             taskView.innerHTML = "";
         })
-        projectView.appendChild(deleteBtn)
+
+        const btnContainer = document.createElement("div");
+        btnContainer.classList.add("project-btn-container");
+        btnContainer.appendChild(btn);
+        btnContainer.appendChild(deleteBtn);
+        projectView.appendChild(btnContainer);
 
         Dom.currentExpandedProject = project;
         Dom.RenderTasks(Dom.currentExpandedProject.getTasks());
@@ -352,6 +367,10 @@ export default class Dom{
         Dom.currentExpandedProject = days;
         const projectView = document.querySelector(".expanded-project-view");
         projectView.innerHTML = "";
+
+        const title = document.createElement("h2");
+        title.textContent = `Upcoming tasks (${days} days)`;
+        projectView.appendChild(title);
 
         let todayTasks = [];
         Dom.projects.forEach(project=>{
