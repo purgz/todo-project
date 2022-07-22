@@ -41,7 +41,7 @@ body{
 }
 
 .left-nav{
-    background-color: var(--celeste);
+    background-color: var(--aero-blue);
     flex: 1;
 }
 
@@ -88,7 +88,7 @@ body{
 }
 
 .task-element{
-    background-color: var(--celeste);
+    background-color: var(--aero-blue);
     height: 30px;
     width: 100%;
     border-radius: 5px;
@@ -104,8 +104,9 @@ body{
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
-    background-color: var(--aero-blue);
+    background-color: var(--white);
     width: 100%;
+    border: solid 0.5px black;
 }
 
 ul{
@@ -113,7 +114,7 @@ ul{
 }
 
 #footer{
-    background-color: var(--cadet);
+    background-color: var(--green-sheen);
     height: 40px;
     display: flex;
     align-items: center;
