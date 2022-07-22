@@ -106,7 +106,7 @@ body{
     transition: max-height 0.2s ease-out;
     background-color: var(--white);
     width: 100%;
-    border: solid 0.5px black;
+    border: solid 0.5px rgba(0, 0, 0, 0.5);
 }
 
 ul{
