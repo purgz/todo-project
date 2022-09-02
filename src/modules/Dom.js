@@ -1,4 +1,4 @@
-import TodoItem from "./todoItem";
+import TodoItem from "./TodoItem";
 import Project from "./Project";
 import Storage from "./Storage";
 import GHIcon from "../images/Icon.svg";

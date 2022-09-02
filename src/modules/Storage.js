@@ -1,4 +1,4 @@
-import TodoItem from "./todoItem";
+import TodoItem from "./TodoItem";
 import Project from "./Project";
 
 export default class Storage{
